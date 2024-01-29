@@ -7,7 +7,7 @@ class BlackJackPlayer(Player):
     def printHand(self):
         self.hand.print(0)
 
-    def clalcHandTotal(self):
+    def calcHandTotal(self):
         total = 0
         aces = []
         handList = self.hand.toList()
@@ -36,11 +36,11 @@ class BlackJackDealer(BlackJackPlayer):
     def printHand(self):
         self.hand.print(1)
 
-    def clalcHandTotal(self):
+    def calcHandTotal(self, startIndex):
         total = 0
         aces = []
         handList = self.hand.toList()
-        for i in handList[1:]:
+        for i in handList[startIndex:]:
             if i.rank < 11:
                 total += i.rank
             elif i.rank < 14:
@@ -70,8 +70,8 @@ class BlackJack(Game):
         self.dealer.hand.add(self.drawCard())
         self.dealer.hand.add(self.drawCard())
 
-        self.playerTotal = self.player.clalcHandTotal()
-        self.dealerTotal = self.dealer.clalcHandTotal()
+        self.playerTotal = self.player.calcHandTotal()
+        self.dealerTotal = self.dealer.calcHandTotal(0)
 
         if self.playerTotal == 21:
             self.playerWin()
@@ -80,7 +80,7 @@ class BlackJack(Game):
         self.displayCards()
         while self.stickOrTwist():
             self.player.hand.add(self.drawCard())
-            self.playerTotal = self.player.clalcHandTotal()
+            self.playerTotal = self.player.calcHandTotal()
             self.displayCards()
             print(f"The player drew the {self.player.hand.toList()[-1]}.")
             if self.playerTotal == 21: # CASE : Player blackjack
@@ -92,7 +92,7 @@ class BlackJack(Game):
         
         while self.dealerTotal < 17:
             self.dealer.hand.add(self.drawCard())
-            self.dealerTotal = self.dealer.clalcHandTotal()
+            self.dealerTotal = self.dealer.calcHandTotal(0)
             self.displayCards()
             print(f"The dealer drew the {self.dealer.hand.toList()[-1]}.")
             if self.dealerTotal > 21: # CASE : Dealer bust
@@ -115,7 +115,7 @@ class BlackJack(Game):
     def displayCards(self):
         print("Dealer Cards:")
         self.dealer.printHand()
-        print(f"{self.dealerTotal} + ?")
+        print(f"{self.dealer.calcHandTotal(1)} + ?")
         print("Your Cards:")
         self.player.printHand()
         print(self.playerTotal)

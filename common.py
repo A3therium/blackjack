@@ -31,7 +31,7 @@ class Card:
         self.rank = rank
 
     def __str__(self) -> str:
-        return f"{Card.rankStringConversions[self.rank - 2]} of {Card.suitStringConversions[self.suit]}"
+        return f"{self.getRank()} of {Card.suitStringConversions[self.suit]}"
     
     def getRank(self) -> str:
         return Card.rankStringConversions[self.rank - 2]
